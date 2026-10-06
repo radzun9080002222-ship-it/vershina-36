@@ -91,3 +91,10 @@
 - Cloud HTTPS стабилен: штатный TLS через curl --resolve 213.180.193.247, GET главной и 13 подключённых JS/CSS/изображений HTTP200; favicon, robots.txt, sitemap.xml, privacy.html HTTP200. www/privacy.html возвращает 301 с сохранением пути.
 - REG.RU подтвердил сохранение ns1.yandexcloud.net и ns2.yandexcloud.net для vershina-36.ru. Старую зону не удаляли. Публичный резолвер пока видит ns1.reg.ru/ns2.reg.ru и GitHub Pages: ожидается распространение делегирования.
 - Последние Cloud/Pages Actions success. Цены, контент, рекламные URL, аналитика и Pages не изменены. Осталась финальная проверка обычного публичного HTTPS после обновления DNS; сертификат повторно не привязывать, NS повторно не менять.
+
+### 06.10.2026, 15:36 МСК — миграция завершена
+
+- Публичные NS ns1.yandexcloud.net/ns2.yandexcloud.net, A 213.180.193.247. Обычный HTTPS без --resolve и без отключения TLS возвращает HTTP200, Server nginx и X-Amz-Request-Id: сайт обслуживается Yandex Object Storage.
+- Все 13 файлов JS/CSS/изображений, favicon.ico, robots.txt, sitemap.xml и privacy.html публично HTTP200. www/privacy.html — HTTPS301 на основной домен с сохранением пути. Ограничение потери query string стандартного www-редиректа сохраняется.
+- Публичный калькулятор интерактивно проверен: генеральная 60 м² = 15 000 ₽, после ремонта 60 м² = 18 000 ₽. Последние Cloud и Pages Actions success. Цены, контент, аналитика и рекламные URL не менялись, GitHub Pages сохранён.
+- Фоновое наблюдение за миграцией завершено; автоматизация удаляется после финальной проверки.

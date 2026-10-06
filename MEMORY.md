@@ -64,3 +64,16 @@
 - Используется готовый брендовый набор из сочинского сайта: `favicon.ico`, PNG 120/48/32/16, Apple Touch и Android Chrome.
 - SHA-256 эталонного `favicon.ico`: `1479DED0F2D53604C258DF97D838E33DFCBD6EE1FE4DAA0EAB90890589DD27BB`.
 - В `index.html` пути абсолютные и используют текущий домен; версия кэша — `v=20260909`.
+
+## 06.10.2026 — подготовка миграции в Yandex Cloud
+
+- Владелец подтвердил создание отдельного сервисного аккаунта и сохранение S3-ключа в GitHub Actions Secrets. Аккаунт `vershina-36-deployer`, ID `ajef455rmaepovn7tud1`, без ролей каталога; `storage.editor` назначен только бакету `vershina-36.ru`.
+- Каталог Cloud `b1go4d6d7lv85ghbmrn9`, аккаунт dima.radzun. Созданы Standard-бакеты `vershina-36.ru` и `www.vershina-36.ru`, максимальный размер каждого 1 ГБ; публичное чтение только объектов, список и настройки приватны.
+- Основной бакет: статический хостинг, index/error `index.html`. www: HTTPS-переадресация на `vershina-36.ru`; путь сохраняется, стандартный redirect Object Storage теряет query string. Рекламные ссылки остаются на основном домене.
+- Secrets `YC_STATIC_ACCESS_KEY_ID` и `YC_STATIC_SECRET_ACCESS_KEY` сохранены в GitHub. Значения ключей не сохранять в коде, памяти и сообщениях.
+- Добавлен `.github/workflows/deploy-yandex-cloud.yml`, runner `ubuntu-24.04-arm`, сборка Node 24/pnpm 11.7 и синхронизация dist в основной бакет. Commit `9242ee3`. Первый Cloud run `37443245460` success, Pages `37443245389` success. Существующий Pages workflow не изменён.
+- Новый website endpoint отдаёт главную 200; проверены 13 реально подключённых JS/CSS/изображений без ошибок, canonical и Воронеж сохранены. Калькулятор интерактивно: после ремонта 60 м² = 18 000 ₽. www/privacy.html — 301 на https://vershina-36.ru/privacy.html.
+- SSL `vershina-36-ru`, ID `fpqsue91dfpcvsj3lsuf`, оба домена; пока Validating. Не переключать NS до Issued, привязки к обоим бакетам и проверки TLS без обхода валидации.
+- Cloud DNS зона `vershina-36-ru`, ID `dnsa3cdecpaptr8rqn6m`: ANAME корня на `vershina-36.ru.website.yandexcloud.net.`, CNAME www на `www.vershina-36.ru.website.yandexcloud.net.`, TTL 600. CNAME `_acme-challenge` и `_acme-challenge.www` на `fpqsue91dfpcvsj3lsuf.cm.yandexcloud.net.` добавлены в Cloud DNS и действующую зону REG.RU.
+- REG.RU карточка `122333587`; текущие NS ns1.reg.ru/ns2.reg.ru не менялись. Старые четыре A GitHub и www CNAME сохранены, MX/TXT отсутствуют. На момент записи ACME ещё не разрешаются публично, ожидается распространение сохранённых записей.
+- Цены, содержание, домен, SEO, рекламные URL и аналитика не менялись. Продолжить после распространения ACME: Issued → привязать SSL → проверить Cloud HTTPS/assets → переключить NS → финальная публичная проверка → остановить фоновое наблюдение.
